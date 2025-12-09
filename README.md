@@ -339,12 +339,9 @@ The smoke test verifies:
 | `src/outputs/*.json` | Generated output files |
 | `tests/smoke_test.py` | Integration test suite |
 
-## License
-
-MIT
 
 ## Author
-
+Vikas Pal
 Built as part of the Kasparro Applied AI Engineer assignment.
 
 ---
