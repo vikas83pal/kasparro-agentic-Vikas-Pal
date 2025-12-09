@@ -1,0 +1,110 @@
+{
+  "name": "GlowBoost Vitamin C Serum",
+  "price": "699.0",
+  "concentration": "10% Vitamin C",
+  "ingredients": [
+    {
+      "ingredient": "Vitamin C",
+      "role": "active"
+    },
+    {
+      "ingredient": "Hyaluronic Acid",
+      "role": "active"
+    }
+  ],
+  "benefits": {
+    "summary": "Provides Brightening, Fades dark spots.",
+    "bullets": [
+      "Brightening",
+      "Fades dark spots"
+    ]
+  },
+  "usage": {
+    "how_to_use": "Apply 2 drops in the morning before sunscreen",
+    "dosage": "2-3 drops",
+    "timing": "Morning before sunscreen"
+  },
+  "safety": {
+    "side_effects": "Mild tingling for sensitive skin",
+    "warnings": [
+      "Patch test before use"
+    ]
+  },
+  "questions": [
+    {
+      "question": "What is GlowBoost Vitamin C Serum?",
+      "category": "Informational",
+      "answer_hint": "GlowBoost Vitamin C Serum with 10% Vitamin C."
+    },
+    {
+      "question": "What are the key ingredients?",
+      "category": "Informational",
+      "answer_hint": "Vitamin C, Hyaluronic Acid"
+    },
+    {
+      "question": "How do I use it?",
+      "category": "Usage",
+      "answer_hint": "Apply 2 drops in the morning before sunscreen"
+    },
+    {
+      "question": "When should I apply this product?",
+      "category": "Usage",
+      "answer_hint": "In the morning before sunscreen"
+    },
+    {
+      "question": "Are there any side effects?",
+      "category": "Safety",
+      "answer_hint": "Mild tingling for sensitive skin"
+    },
+    {
+      "question": "Is this safe for sensitive skin?",
+      "category": "Safety",
+      "answer_hint": "May cause mild tingling for sensitive skin"
+    },
+    {
+      "question": "How much does it cost?",
+      "category": "Purchase",
+      "answer_hint": "₹699"
+    },
+    {
+      "question": "Where can I buy it?",
+      "category": "Purchase",
+      "answer_hint": "Available from listed retailers"
+    },
+    {
+      "question": "How does it compare to other vitamin C serums?",
+      "category": "Comparison",
+      "answer_hint": "10% concentration and includes hyaluronic acid"
+    },
+    {
+      "question": "What benefits can I expect?",
+      "category": "Informational",
+      "answer_hint": "Brightening, Fades dark spots"
+    },
+    {
+      "question": "Will it help fade dark spots?",
+      "category": "Informational",
+      "answer_hint": "Designed to help fade dark spots"
+    },
+    {
+      "question": "What skin types is this for?",
+      "category": "Informational",
+      "answer_hint": "Oily, Combination"
+    },
+    {
+      "question": "How much should I apply?",
+      "category": "Usage",
+      "answer_hint": "2–3 drops"
+    },
+    {
+      "question": "Can I use it with other actives (retinol/acid)?",
+      "category": "Safety",
+      "answer_hint": "Use caution with strong actives"
+    },
+    {
+      "question": "How soon will I see results?",
+      "category": "Informational",
+      "answer_hint": "Results may vary; visible improvement over weeks"
+    }
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "title": "Comparison",
+  "compare": {
+    "common": [
+      "vitamin c"
+    ],
+    "only_a": [
+      "hyaluronic acid"
+    ],
+    "only_b": [
+      "niacinamide"
+    ]
+  },
+  "product_b": {
+    "product_name": "RadiantBlend Vitamin C Concentrate",
+    "concentration": "12% Vitamin C",
+    "skin_type": [
+      "Dry",
+      "Combination"
+    ],
+    "key_ingredients": [
+      "Vitamin C",
+      "Niacinamide"
+    ],
+    "benefits": "Brightening, Hydration",
+    "how_to_use": "Apply at night",
+    "side_effects": "None commonly reported",
+    "price": 899.0
+  }
+}

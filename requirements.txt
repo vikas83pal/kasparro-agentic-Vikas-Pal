@@ -1,0 +1,2 @@
+# Requirements for Kasparro AI Agentic Content Generation System
+# No external dependencies needed for the core system

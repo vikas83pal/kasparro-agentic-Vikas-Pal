@@ -1,0 +1,4 @@
+{
+  "title": "FAQ - {{model.product_name}}",
+  "questions": "questions"
+}

@@ -1,0 +1,55 @@
+{
+  "title": "FAQ - GlowBoost Vitamin C Serum",
+  "questions": [
+    {
+      "question": "What is GlowBoost Vitamin C Serum?",
+      "category": "Informational",
+      "answer_hint": "GlowBoost Vitamin C Serum with 10% Vitamin C."
+    },
+    {
+      "question": "What are the key ingredients?",
+      "category": "Informational",
+      "answer_hint": "Vitamin C, Hyaluronic Acid"
+    },
+    {
+      "question": "How do I use it?",
+      "category": "Usage",
+      "answer_hint": "Apply 2 drops in the morning before sunscreen"
+    },
+    {
+      "question": "When should I apply this product?",
+      "category": "Usage",
+      "answer_hint": "In the morning before sunscreen"
+    },
+    {
+      "question": "Are there any side effects?",
+      "category": "Safety",
+      "answer_hint": "Mild tingling for sensitive skin"
+    },
+    {
+      "question": "Is this safe for sensitive skin?",
+      "category": "Safety",
+      "answer_hint": "May cause mild tingling for sensitive skin"
+    },
+    {
+      "question": "How much does it cost?",
+      "category": "Purchase",
+      "answer_hint": "₹699"
+    },
+    {
+      "question": "Where can I buy it?",
+      "category": "Purchase",
+      "answer_hint": "Available from listed retailers"
+    },
+    {
+      "question": "How does it compare to other vitamin C serums?",
+      "category": "Comparison",
+      "answer_hint": "10% concentration and includes hyaluronic acid"
+    },
+    {
+      "question": "What benefits can I expect?",
+      "category": "Informational",
+      "answer_hint": "Brightening, Fades dark spots"
+    }
+  ]
+}
