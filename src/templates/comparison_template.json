@@ -1,6 +1,36 @@
 {
-  "title": "Comparison",
-  "compare": {
-    "block": "compare_ingredients_block"
+  "template_name": "comparison_page",
+  "description": "Template for product comparison page",
+  "fields": {
+    "title": {
+      "type": "string",
+      "value": "Product Comparison"
+    },
+    "product_a": {
+      "type": "object",
+      "source": "model",
+      "fields": ["product_name", "concentration", "key_ingredients", "benefits", "price"]
+    },
+    "product_b": {
+      "type": "object",
+      "source": "fictional_product",
+      "note": "Fictional product for comparison"
+    },
+    "comparison": {
+      "type": "object",
+      "block": "generate_comparison_block",
+      "schema": {
+        "common_ingredients": "array",
+        "unique_to_a": "array",
+        "unique_to_b": "array",
+        "price_difference": "number",
+        "recommendation": "string"
+      }
+    },
+    "verdict": {
+      "type": "string",
+      "rule": "generate",
+      "value": "Both products offer unique benefits. Choose based on your specific needs."
+    }
   }
 }

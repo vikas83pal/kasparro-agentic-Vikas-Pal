@@ -1,13 +1,13 @@
-FROM python:3.11-slim
+FROM python:3.10-slim
 
 WORKDIR /app
 
-# Copy source code
-COPY src/ /app/src/
-COPY requirements.txt /app/
-
-# Install dependencies
+# Copy requirements first for caching
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Run the application
+# Copy source code
+COPY . .
+
+# Run the pipeline
 CMD ["python", "-m", "src.main"]

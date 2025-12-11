@@ -1,53 +1,36 @@
-# Python
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-*.so
-.Python
-env/
+
+# Virtual environment
+.venv/
 venv/
 ENV/
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
-*.egg-info/
-.installed.cfg
-*.egg
-
-# Virtual environments
-.venv
-env
-venv
 
 # IDE
-.vscode/
 .idea/
+.vscode/
 *.swp
 *.swo
-*~
+
+# OS
 .DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
 
 # Testing
 .pytest_cache/
 .coverage
 htmlcov/
-
-# Temporary files
-*.log
-*.tmp
-*.bak
-
-# Setup files (temporary)
-setup_files.py
-fix_template.py
-update_template.py
-write_docs.py

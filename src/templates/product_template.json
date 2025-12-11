@@ -1,18 +1,69 @@
 {
-  "name": "{{model.product_name}}",
-  "price": "{{model.price}}",
-  "concentration": "{{model.concentration}}",
-  "ingredients": {
-    "block": "ingredients_block"
-  },
-  "benefits": {
-    "block": "benefits_block"
-  },
-  "usage": {
-    "block": "usage_block"
-  },
-  "safety": {
-    "block": "safety_block"
-  },
-  "questions": "questions"
+  "template_name": "product_page",
+  "description": "Template for product description page",
+  "fields": {
+    "name": {
+      "type": "string",
+      "source": "model.product_name"
+    },
+    "tagline": {
+      "type": "string",
+      "rule": "generate",
+      "value": "{{model.benefits}} with {{model.concentration}}"
+    },
+    "price": {
+      "type": "number",
+      "source": "model.price",
+      "format": "currency_inr"
+    },
+    "concentration": {
+      "type": "string",
+      "source": "model.concentration"
+    },
+    "skin_types": {
+      "type": "array",
+      "source": "model.skin_type"
+    },
+    "ingredients": {
+      "type": "array",
+      "block": "generate_ingredients_block",
+      "item_schema": {
+        "name": "string",
+        "role": "string",
+        "benefit": "string"
+      }
+    },
+    "benefits": {
+      "type": "object",
+      "block": "generate_benefits_block",
+      "schema": {
+        "summary": "string",
+        "bullets": "array"
+      }
+    },
+    "usage": {
+      "type": "object",
+      "block": "generate_usage_block",
+      "schema": {
+        "instructions": "string",
+        "dosage": "string",
+        "timing": "string",
+        "frequency": "string"
+      }
+    },
+    "safety": {
+      "type": "object",
+      "block": "generate_safety_block",
+      "schema": {
+        "side_effects": "string",
+        "warnings": "array",
+        "contraindications": "array"
+      }
+    },
+    "questions": {
+      "type": "array",
+      "source": "questions",
+      "max_items": 5
+    }
+  }
 }

@@ -1,80 +1,81 @@
-
+"""
+Main Entry Point
+Runs the LangChain-based content generation pipeline.
+"""
 import json
 import os
-import sys
-from pathlib import Path
+from src.orchestrator import create_orchestrator
 
-
-sys.path.insert(0, str(Path(__file__).parent))
-
-from agents.parser_agent import ParserAgent
-from agents.qgen_agent import QuestionGenAgent
-from agents.block_agent import BlockAgent
-from agents.template_agent import TemplateAgent
-from agents.assembler_agent import AssemblerAgent
-from orchestrator import Orchestrator
-
+# Setup paths
 BASE = os.path.dirname(__file__)
 OUTPUT_PATH = os.path.join(BASE, 'outputs')
 if not os.path.exists(OUTPUT_PATH):
     os.makedirs(OUTPUT_PATH)
 
-
-FAQ_TEMPLATE = {
-    'title': 'FAQ - {{model.product_name}}',
-    'questions': 'questions'
-}
-
-PRODUCT_TEMPLATE = {
-    'name': '{{model.product_name}}',
-    'price': '{{model.price}}',
-    'concentration': '{{model.concentration}}',
-    'ingredients': {'block': 'ingredients_block'},
-    'benefits': {'block': 'benefits_block'},
-    'usage': {'block': 'usage_block'},
-    'safety': {'block': 'safety_block'},
-    'questions': 'questions'
-}
-
-COMPARISON_TEMPLATE = {
-    'title': 'Comparison',
-    'compare': {'block': 'compare_ingredients_block'}
-}
-
-TEMPLATES = {
-    'faq': FAQ_TEMPLATE,
-    'product_page': PRODUCT_TEMPLATE,
-    'comparison': COMPARISON_TEMPLATE
-}
-
-# Input product
+# Input product (as specified in assignment)
 RAW_PRODUCT = {
     'Product Name': 'GlowBoost Vitamin C Serum',
     'Concentration': '10% Vitamin C',
     'Skin Type': 'Oily, Combination',
     'Key Ingredients': 'Vitamin C, Hyaluronic Acid',
     'Benefits': 'Brightening, Fades dark spots',
-    'How to Use': 'Apply 2 drops in the morning before sunscreen',
+    'How to Use': 'Apply 2–3 drops in the morning before sunscreen',
     'Side Effects': 'Mild tingling for sensitive skin',
-    'Price': '699'
+    'Price': '₹699'
 }
 
-
-def build_and_run():
-    parser = ParserAgent()
-    qgen = QuestionGenAgent()
-    block = BlockAgent()
-    template_agent = TemplateAgent(block)
-    assembler = AssemblerAgent(template_agent, TEMPLATES, OUTPUT_PATH)
-
-    orchestrator = Orchestrator({'parser': parser, 'qgen': qgen, 'assembler': assembler})
+def run_pipeline():
+    """Execute the LangChain content generation pipeline."""
+    print("=" * 60)
+    print("Kasparro AI Content Generation System")
+    print("LangChain Multi-Agent Pipeline")
+    print("=" * 60)
+    
+    # Create orchestrator
+    print("\n[1/4] Initializing LangChain orchestrator...")
+    orchestrator = create_orchestrator()
+    
+    # Run the chain
+    print("[2/4] Executing agent workflow...")
+    print("      → ParserAgent: Normalizing input data")
+    print("      → QuestionGeneratorAgent: Generating questions")
+    print("      → ContentBlockAgent: Creating content blocks")
+    print("      → ComparisonAgent: Building comparison")
+    print("      → AssemblyAgent: Assembling pages")
+    
     outputs = orchestrator.run(RAW_PRODUCT)
-    print('Outputs written to', OUTPUT_PATH)
-    print('Generated files:')
-    print('  - faq.json')
-    print('  - product_page.json')
-    print('  - comparison_page.json')
-
+    
+    # Extract pages
+    print("[3/4] Extracting outputs...")
+    product_page = outputs['product_page']
+    faq_page = outputs['faq_page']
+    comparison_page = outputs['comparison_page']
+    
+    # Write to files
+    print(f"[4/4] Writing JSON outputs to {OUTPUT_PATH}...")
+    
+    with open(os.path.join(OUTPUT_PATH, 'product_page.json'), 'w', encoding='utf-8') as f:
+        json.dump(product_page.model_dump(), f, indent=2, ensure_ascii=False)
+    
+    with open(os.path.join(OUTPUT_PATH, 'faq.json'), 'w', encoding='utf-8') as f:
+        json.dump(faq_page.model_dump(), f, indent=2, ensure_ascii=False)
+    
+    with open(os.path.join(OUTPUT_PATH, 'comparison_page.json'), 'w', encoding='utf-8') as f:
+        json.dump(comparison_page.model_dump(), f, indent=2, ensure_ascii=False)
+    
+    # Summary
+    print("\n" + "=" * 60)
+    print("✅ SUCCESS! Generated files:")
+    print("   • faq.json")
+    print("   • product_page.json")
+    print("   • comparison_page.json")
+    print("=" * 60)
+    
+    # Stats
+    print(f"\n📊 Statistics:")
+    print(f"   Questions generated: {len(faq_page.questions)}")
+    print(f"   Ingredients processed: {len(product_page.ingredients)}")
+    print(f"   Content blocks created: 4 (benefits, usage, safety, ingredients)")
 
 if __name__ == '__main__':
-    build_and_run()
+    run_pipeline()

@@ -1,201 +1,126 @@
-# Kasparro AI Agentic Content Generation System - Project Documentation
-
-## Executive Summary
-
-This document provides detailed technical specifications for the Kasparro AI Agentic Content Generation System - a production-style, end-to-end multi-agent framework for autonomously generating structured, machine-readable marketing content (FAQ, Product Page, and Comparison Page) from product JSON input.
-
-The system demonstrates advanced software engineering principles including:
-- **Modular Architecture:** Loosely-coupled agents with single responsibilities
-- **Explicit Message Passing:** DAG-based orchestration with transparent data flow
-- **Reusable Components:** Shared content logic blocks for consistent content generation
-- **Template-Driven Design:** Configurable template engine for flexible output formatting
-
----
+# Project Documentation
 
 ## Problem Statement
 
-**Challenge:** Design a modular multi-agent system that autonomously produces structured, machine-readable pages from minimal product data, using clearly defined agents with explicit message-passing, reusable content logic blocks, and a custom template engine.
-
-**Requirements:**
-1. Accept product data as JSON input
-2. Generate at least 15 categorized FAQ questions
-3. Produce three distinct output pages: FAQ, Product Page, and Comparison Page
-4. Use modular agent architecture with clear boundaries
-5. Implement explicit message-passing between agents (no hidden global state)
-6. Create reusable content logic blocks
-7. Build custom template engine for output generation
-8. Generate valid JSON outputs suitable for machine processing
-9. Support extensibility for multiple products
-
----
+Design and implement a **modular agentic automation system** that takes a product dataset and automatically generates structured, machine-readable content pages (FAQ, Product Page, Comparison Page).
 
 ## Solution Overview
 
-The system implements a **Directed Acyclic Graph (DAG)** orchestrator that coordinates five specialized agents:
+This solution implements a **LangChain-based multi-agent system** with:
+
+- **5 Real Agent Components** with clear responsibilities
+- **LangChain RunnableSequence** for orchestration
+- **@tool decorated functions** for reusable logic blocks
+- **Pydantic models** for type-safe JSON output
+- **Template definitions** for page structure
+
+## Scopes & Assumptions
+
+### In Scope
+- Single product processing (GlowBoost Vitamin C Serum)
+- 3 output pages: FAQ, Product, Comparison
+- 16 categorized questions
+- Fictional Product B for comparison
+
+### Assumptions
+- No external API calls required
+- Rule-based content generation (LLM-ready architecture)
+- All content derived from provided product data
+
+## System Design
+
+### Architecture Overview
 
 ```
-Input Product JSON
-        ↓
-   [ParserAgent]  → Normalized Product Model
-        ↓
- [QuestionGenAgent] → 15+ Categorized Questions
-        ↓
-  [AssemblerAgent]
-        ├─→ [TemplateAgent] + [BlockAgent] → FAQ JSON
-        ├─→ [TemplateAgent] + [BlockAgent] → Product Page JSON
-        └─→ [TemplateAgent] + [BlockAgent] → Comparison JSON
-        ↓
-   JSON Outputs
+┌─────────────────────────────────────────────────────────────────┐
+│                    LANGCHAIN ORCHESTRATOR                       │
+│                  (RunnableSequence Chain)                       │
+├─────────────────────────────────────────────────────────────────┤
+│                                                                 │
+│   RAW INPUT                                                     │
+│       │                                                         │
+│       ▼                                                         │
+│   ┌─────────────────┐                                          │
+│   │  PARSER AGENT   │  → Tool: parse_product_data              │
+│   │  (Agent 1)      │  → Output: InternalProductModel          │
+│   └────────┬────────┘                                          │
+│            │                                                    │
+│            ▼                                                    │
+│   ┌─────────────────────────────────────────────────────┐      │
+│   │              PARALLEL GENERATION                     │      │
+│   │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐   │      │
+│   │  │  QUESTION   │ │  CONTENT    │ │ COMPARISON  │   │      │
+│   │  │  GENERATOR  │ │   BLOCK     │ │   AGENT     │   │      │
+│   │  │  (Agent 2)  │ │  (Agent 3)  │ │  (Agent 4)  │   │      │
+│   │  └─────────────┘ └─────────────┘ └─────────────┘   │      │
+│   └─────────────────────┬───────────────────────────────┘      │
+│                         │                                       │
+│                         ▼                                       │
+│   ┌─────────────────┐                                          │
+│   │ ASSEMBLY AGENT  │  → Combines all outputs                  │
+│   │    (Agent 5)    │  → Creates final JSON pages              │
+│   └────────┬────────┘                                          │
+│            │                                                    │
+│            ▼                                                    │
+│   ┌─────────────────────────────────────────────────────┐      │
+│   │                    OUTPUTS                           │      │
+│   │   faq.json    product_page.json    comparison.json  │      │
+│   └─────────────────────────────────────────────────────┘      │
+└─────────────────────────────────────────────────────────────────┘
 ```
 
----
+### Agent Components
 
-## System Architecture
+| Agent | Class | Responsibility | Tools Used |
+|-------|-------|----------------|------------|
+| **Agent 1** | `ParserAgent` | Normalize raw input | `parse_product_data` |
+| **Agent 2** | `QuestionGeneratorAgent` | Generate 16 Q&As | `generate_questions` |
+| **Agent 3** | `ContentBlockAgent` | Create content blocks | 4 block tools |
+| **Agent 4** | `ComparisonAgent` | Compare products | `generate_comparison_block` |
+| **Agent 5** | `AssemblyAgent` | Assemble JSON pages | Composition |
 
-### Agent Specifications
+### LangChain Components Used
 
-#### 1. ParserAgent (`src/agents/parser_agent.py`)
-- Normalizes field names (lowercase, underscore-separated)
-- Validates required fields
-- Parses comma-separated lists
-- Converts price to numeric value
+| Component | Purpose |
+|-----------|---------|
+| `@tool` decorator | Define reusable logic blocks |
+| `RunnableLambda` | Wrap agent execution |
+| `RunnableSequence` | Chain agents together |
+| `Pydantic BaseModel` | Type-safe data models |
 
-#### 2. QuestionGenAgent (`src/agents/qgen_agent.py`)
-- Generates 15+ categorized questions
-- Categories: Informational, Usage, Safety, Purchase, Comparison, Other
-- Provides answer hints based on product data
+### Tools (Reusable Logic Blocks)
 
-#### 3. BlockAgent (`src/agents/block_agent.py`)
-- Reusable content transformation functions
-- Methods: benefits_block, usage_block, safety_block, ingredients_block, compare_ingredients_block
-- Pure, stateless functions
+| Tool | File | Purpose |
+|------|------|---------|
+| `parse_product_data` | `tools.py` | Normalize keys, parse lists |
+| `generate_questions` | `tools.py` | Create 16 categorized questions |
+| `generate_benefits_block` | `tools.py` | Benefits summary + bullets |
+| `generate_usage_block` | `tools.py` | Usage instructions |
+| `generate_safety_block` | `tools.py` | Safety warnings |
+| `generate_ingredients_block` | `tools.py` | Ingredient classification |
+| `generate_comparison_block` | `tools.py` | Product comparison |
 
-#### 4. TemplateAgent (`src/agents/template_agent.py`)
-- Custom template rendering engine
-- Resolves model references: {{model.field_name}}
-- Invokes blocks: {"block": "method_name"}
-- Processes nested structures recursively
-
-#### 5. AssemblerAgent (`src/agents/assembler_agent.py`)
-- Orchestrates page assembly
-- Creates fictional product B for comparison
-- Manages file I/O to src/outputs/
-
-### Orchestrator Pattern
-
-DAG-based message-passing orchestrator with explicit data flow:
-- No hidden global state
-- Clear visibility into agent interactions
-- Composable and extensible
-
----
-
-## Data Flow
+### Data Flow
 
 ```
-RAW_PRODUCT → ParserAgent → NORMALIZED_MODEL
-                                ↓
-                        QuestionGenAgent → QUESTIONS
-                                ↓
-                        AssemblerAgent → JSON OUTPUTS
-                        (invokes TemplateAgent + BlockAgent)
+Raw JSON → ParserAgent → InternalProductModel
+                              │
+              ┌───────────────┼───────────────┐
+              ▼               ▼               ▼
+         Questions      ContentBlocks    Comparison
+              │               │               │
+              └───────────────┼───────────────┘
+                              ▼
+                       AssemblyAgent
+                              │
+                              ▼
+                    3 JSON Output Files
 ```
 
----
+### Output Structure
 
-## Key Design Principles
+All outputs are fully JSON-structured:
 
-1. **Single Responsibility:** Each agent has one reason to change
-2. **Explicit Message-Passing:** All data flows are visible
-3. **Composability:** Agents can be reused and combined
-4. **Testability:** Components can be tested independently
-5. **Extensibility:** Easy to add new agents/blocks/templates
-
----
-
-## Output Structure
-
-### FAQ Output
-- Title with product name
-- Array of 10+ questions with category and hints
-
-### Product Page Output
-- Product name, price, concentration
-- Structured ingredients, benefits, usage, safety
-- Full questions array
-
-### Comparison Output
-- Comparison of ingredients
-- Fictional product B specification
-- Set-based analysis (common, unique to A, unique to B)
-
----
-
-## Running the System
-
-```bash
-# Setup
-python -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
-
-# Run
-python -m src.main
-
-# Test
-python tests/smoke_test.py
-```
-
----
-
-## Extension Points
-
-### Add New Agent
-Create new agent file with run() method and register in orchestrator.
-
-### Add New Block
-Add method to BlockAgent following the pattern:
-```python
-def new_block(self, model: Dict[str, Any]) -> Any:
-    # Transform and return
-```
-
-### Add New Template
-Create JSON file in src/templates/ and register in TEMPLATES dict.
-
----
-
-## Production Roadmap
-
-1. Database storage for templates and products
-2. Queue-based workers (Celery/Kafka)
-3. API layer for external access
-4. Enhanced error handling and logging
-5. LLM integration for intelligent content
-6. Multi-language support
-7. Analytics and monitoring
-
----
-
-## Technical Stack
-
-- **Language:** Python 3.8+
-- **Dependencies:** None (pure Python)
-- **Deployment:** Docker-compatible
-- **Testing:** Pytest-compatible smoke tests
-
----
-
-## Success Criteria
-
-- ✅ Generates 3 valid JSON files
-- ✅ FAQ has 15+ questions
-- ✅ All agents follow SRP
-- ✅ Explicit message-passing throughout
-- ✅ Extensible and maintainable design
-
----
-
-**Version:** 1.0  
-**Date:** December 9, 2025  
-**Status:** Complete
+1. **faq.json**: `{ title, questions[] }`
+2. **product_page.json**: `{ name, price, ingredients[], benefits{}, usage{}, safety{}, questions[] }`
+3. **comparison_page.json**: `{ title, product_a{}, product_b{}, comparison{} }`

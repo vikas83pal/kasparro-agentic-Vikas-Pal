@@ -1,4 +1,34 @@
 {
-  "title": "FAQ - {{model.product_name}}",
-  "questions": "questions"
+  "template_name": "faq_page",
+  "description": "Template for FAQ page generation",
+  "fields": {
+    "title": {
+      "type": "string",
+      "rule": "concat",
+      "value": "FAQ - {{model.product_name}}"
+    },
+    "product_name": {
+      "type": "string",
+      "source": "model.product_name"
+    },
+    "generated_date": {
+      "type": "string",
+      "rule": "timestamp"
+    },
+    "questions": {
+      "type": "array",
+      "source": "questions",
+      "min_items": 5,
+      "item_schema": {
+        "question": "string",
+        "category": "string",
+        "answer_hint": "string"
+      }
+    },
+    "categories": {
+      "type": "array",
+      "rule": "extract_unique",
+      "source": "questions.category"
+    }
+  }
 }

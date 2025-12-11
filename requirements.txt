@@ -1,2 +1,8 @@
-# Requirements for Kasparro AI Agentic Content Generation System
-# No external dependencies needed for the core system
+# Core dependencies
+langchain>=0.1.0
+langchain-core>=0.1.0
+langgraph>=0.0.20
+pydantic>=2.0.0
+
+# Optional (for .env support)
+python-dotenv>=1.0.0
